@@ -9,17 +9,23 @@ library(tidyverse)
 library(RColorBrewer)
 library(knitr)
 library(scales)
+library(gganimate)
+library(lubridate)
 
 # read in the data 
-stops1 <- read_csv("data/stops1.csv", na = "NULL")
-stops2 <- read_csv("data/stops2.csv", na = "NULL")
-
+stops1 <- read_csv("data/stops-janmar20.csv", na = "NULL", col_types = cols(.default = "c"))
+stops2 <- read_csv("data/stops-marjun20.csv", na = "NULL", col_types = cols(.default = "c"))
+stops3 <- read_csv("data/stops-julsept20.csv", na = "NULL", col_types = cols(.default = "c"))
+stops4 <- read_csv("data/stops-octdec20.csv", na = "NULL", col_types = cols(.default = "c"))
 # ................................................................
 
 # join time periods together
 stops <- full_join(stops1, stops2, by=names(stops1))
+stops <- full_join(stops, stops3, by=names(stops1))
+stops <- full_join(stops, stops4, by=names(stops1))
 
 # categorical duration values
+stops$stop_duration_minutes <- as.numeric(stops$stop_duration_minutes)
 stops$duration_cut <- cut(stops$stop_duration_minutes, 
                           breaks = c(1,5,20,60, 120, 360), 
                           include.lowest = T)
@@ -62,7 +68,7 @@ ggplot(subset(stops, !is.na(stop_district)), aes(stop_district, fill=race_ethnic
        x="District", y="Percent") 
 
 # stop duration by race
-ggplot(stops, aes(duration_cut, fill=race_ethnicity)) + geom_bar(position="dodge")
+ggplot(stops, aes(duration_cut, fill=race_ethnicity)) + geom_bar(position="fill")
 
 # and median and mean
 stops %>% 
@@ -92,4 +98,7 @@ prop.table(table(stops$person_search_or_protective_pat_down, stops$race_ethnicit
 # 17% Black, 3.3% white
 
 
+# ................................................................
 
+rm(list=ls()[! ls() %in% c("stops","youth")])
+save.image("data/mpd-20.RData")
