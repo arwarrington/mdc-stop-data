@@ -17,6 +17,6 @@ mapped_data <- inner_join(stopdata, map)
 str(mapped_data)
 
 ggplot(mapped_data) +
-  geom_sf(aes(fill= MedianIncome))+
+  geom_sf(aes(fill= ))+
   scale_fill_gradient(low="#56B1F7", high="#132B43")
 
