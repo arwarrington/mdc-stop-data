@@ -10,7 +10,12 @@ system("unzip ~/Desktop/R/mdc_stops/Police_Districts.zip")
 my_spdf <- readOGR(dsn="~/Desktop/R/mdc_stops/Police_Districts/",
                    layer="Police_Districts",
                     verbose=FALSE)
+#rename districts
+stopdata$stop_district[c("1D","2D","3D","4D","5D","6D","7D",NULL,"")]<-c(1,2,3,4,5,6,7,NULL,"")
+
+
 map <- tidy(my_spdf, region = "NAME")
+
 
 mapped_data <- inner_join(stopdata, map)
 
