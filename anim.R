@@ -12,6 +12,7 @@ library(RColorBrewer)
 library(knitr)
 library(scales)
 library(gganimate)
+library(lubridate)
 
 # load data 
 load("data/mpd-20.RData")
@@ -91,4 +92,7 @@ ggplot(subset(dayhour, !is.na(wday)), aes(hour, wday)) + geom_tile(aes(fill = n)
        x = "Stops Per Hour", y = "Day of Week") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
   transition_time(week)
+
+test <- stops$stop_location_block[1:10]
+
 
